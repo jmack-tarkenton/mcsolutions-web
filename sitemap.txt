@@ -1,0 +1,4 @@
+https://mccormicksolutions.com/	2019-10-16T19:46:31+00:00	1.00
+https://mccormicksolutions.com/about.html	2019-10-16T19:46:31+00:00	0.80
+https://mccormicksolutions.com/services.html	2019-10-16T19:46:31+00:00	0.80
+https://mccormicksolutions.com/contact.html	2019-10-16T19:46:31+00:00	0.80

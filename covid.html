@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Modern Business - Start Bootstrap Template</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous">
+        </script>
+    </head>
+    <body class="d-flex flex-column">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav id="nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+            </nav>
+            <!-- Pricing section-->
+            <section class="bg-light">
+                <div class="container-fluid p-0">
+                    <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
+
+                    <script src="https://js.arcgis.com/4.14/"></script>
+                    
+                    <style>
+                        html,
+                        body,
+                        #viewDiv {
+                            margin-top: 5;
+                            height: 100%;
+                            width: 100%;
+                            margin: 0;
+                            padding: 10;
+                        }
+                    
+                        #infoDiv {
+                            background: black;
+                            padding: 10px;
+                        }
+                    
+                        @media only screen and (max-width: 600px) {
+                            .esri-legend {
+                                max-width: 50%
+                            }
+                        }
+                    </style>
+                    
+                    <script>
+                        require([
+                                "esri/Map",
+                                "esri/views/MapView",
+                                "esri/layers/FeatureLayer",
+                                "esri/widgets/Legend",
+                                "esri/widgets/Expand",
+                                "esri/Graphic",
+                                "esri/PopupTemplate",
+                                "esri/renderers/ClassBreaksRenderer",
+                                "esri/renderers/smartMapping/creators/opacity",
+                                "esri/renderers/smartMapping/statistics/classBreaks",
+                    
+                            ],
+                            function(Map, MapView, FeatureLayer, Legend, Expand, Graphic, PopupTemplate, ClassBreaksRenderer, opacityVariableCreator, classBreaks) {
+                    
+                                var serviceUrl = "https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases_US/FeatureServer/0";
+                    
+                                var countyLayer = new FeatureLayer({
+                                    url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/counties_politics_poverty/FeatureServer/0",
+                                    definitionExpression: "STATE='GA'",
+                                    outFields: ["*"],
+                    
+                                });
+                                var layer = new FeatureLayer({
+                                    url: serviceUrl,
+                                    definitionExpression: "Province_State='Georgia'",
+                                    title: "Georgia Covid Cases",
+                                    outFields: ["*"],
+                                });
+                    
+                                function queryAttributes(layer) {
+                                    var layerQuery = layer.createQuery();
+                                    return layer.queryFeatures(layerQuery).then(function(response) {
+                                        covidFeatures = response.features.map(function(feature) {
+                                            return feature
+                                        });
+                                        return covidFeatures;
+                                    });
+                                }
+                    
+                                async function joinLayers() {
+                                    let covid = await queryAttributes(layer);
+                                    let counties = await queryAttributes(countyLayer);
+                                    let countyObject = {
+                                        'Unknown': []
+                                    };
+                    
+                                    covid.forEach(rona => {
+                                        if (!rona.attributes) {
+                                            return;
+                                        }
+                                        if (!rona.attributes.Admin2) {
+                                            let unknown = countyObject['Unknown'];
+                                            unknown.push(rona.attributes);
+                                        }
+                                        countyObject[rona.attributes.Admin2] = {};
+                                        countyObject[rona.attributes.Admin2]['attributes'] = {};
+                                        return countyObject[rona.attributes.Admin2]['attributes'] = rona.attributes;
+                                    })
+                                    counties.forEach(county => {
+                                        let countyIndex = countyObject[county.attributes.COUNTY];
+                                        if (typeof countyIndex !== 'undefined') {
+                                            countyIndex['geometry'] = county.geometry;
+                                            countyIndex['attributes'] = {
+                                                ...countyIndex.attributes,
+                                                ...county.attributes
+                                            }
+                                        }
+                                    })
+                                    return countyObject;
+                                }
+                                displayContent = (feature) => {
+                    
+                                    var atts = feature.graphic.attributes;
+                    
+                    
+                                    var div = document.createElement("div");
+                                    var upArrow =
+                                        '<svg width="16" height="16" ><polygon points="14.14 7.07 7.07 0 0 7.07 4.07 7.07 4.07 16 10.07 16 10.07 7.07 14.14 7.07" style="fill:green"/></svg>';
+                                    var downArrow =
+                                        '<svg width="16" height="16"><polygon points="0 8.93 7.07 16 14.14 8.93 10.07 8.93 10.07 0 4.07 0 4.07 8.93 0 8.93" style="fill:red"/></svg>';
+                    
+                                    var percentInfected = !atts['Confirmed'] || atts['Confirmed'] === 0 ? 'No recorded cases here yet' : (atts['Confirmed'] / atts['POPULATION']).toFixed(5)
+                                    // var pctChange = (diff * 100) / feature.graphic.attributes.POP2010;
+                                    // var arrow = diff > 0 ? upArrow : downArrow;
+                                    const covidVsPop = `<span style="font-weight:bold;" class="bold">${atts['Confirmed']}</span> confirmed cases out of ${atts['POPULATION']} residents.`;
+                                    const covidPercent = typeof percentInfected === "String" ? percentInfected : `${percentInfected.toString()}`;
+                                    // add green arrow if the percent change is positive.
+                                    // red arrow for negative percent change.
+                                    div.innerHTML = '<p>' + covidVsPop + '<br><br/>' +
+                                        'Infection Rate: ' + covidPercent + '<br></br>' +
+                                        'Deaths: ' + atts['Deaths']
+                                    // arrow 
+                                    // +
+                                    // "<span style='color: " +
+                                    // (pctChange < 0 ? "red" : "green") +
+                                    // ";'>" +
+                                    // pctChange.toFixed(3) +
+                                    // "%</span>";
+                                    return div;
+                                }
+                    
+                    
+                                async function getGraphics() {
+                                    //uncomment
+                                    // if(window.localStorage.graphics){
+                                    //     return window.localStorage.graphics;
+                                    // }
+                                    var features = await joinLayers();
+                                    var featureArray = Object.entries(features).filter(entry => entry !== undefined);
+                                    const featureTrimmed = featureArray.map(([key, value]) => ({
+                                        ...value
+                                    })).filter(county => county !== undefined)
+                                    featureTrimmed.splice(0, 1);
+                    
+                    
+                    
+                                    var featureSet = featureTrimmed.map(county => {
+                    
+                                        return new Graphic({
+                                            geometry: county.geometry,
+                                            // symbol: symbolMaker(county.attributes.Confirmed, county.attributes.Deaths),
+                                            attributes: county.attributes,
+                                            popupTemplate: {
+                                                title: "{COUNTY} County",
+                                                outFields: ["*"],
+                                                content: displayContent
+                                            }
+                                        })
+                                    });
+                                    // //uncomment
+                                    // window.localStorage.graphics=[...featureSet];
+                                    return featureSet;
+                                }
+                                var map = new Map({
+                                    basemap: "gray-vector",
+                                    // layers: [layer, countyLayer]
+                                });
+                                var view = new MapView({
+                                    container: "viewDiv",
+                                    map: map,
+                                    center: [32.1656, 82.9001],
+                                    zoom: 12,
+                                    popup: {
+                                        dockEnabled: true,
+                                        dockOptions: {
+                                            // Disables the dock button from the popup
+                                            buttonEnabled: true,
+                                            // Ignore the default sizes that trigger responsive docking
+                                            breakpoint: false,
+                                            location: 'top-right'
+                                        }
+                                    }
+                                });
+                                var countyLabels = {
+                                    symbol: {
+                                        type: "text",
+                                        color: "#FFFFFF",
+                                        haloColor: "black",
+                                        haloSize: "2px",
+                                        font: {
+                                            size: "12px",
+                                            family: "Noto Sans",
+                                            // style: "italic",
+                                            weight: "normal"
+                                        }
+                                    },
+                                    labelPlacement: "always-horizontal",
+                                    labelExpressionInfo: {
+                                        expression: "$feature.COUNTY"
+                                    }
+                                };
+                    
+                    
+                    
+                                const getStats = (features) => {
+                                    let totalCases = 0;
+                                    let totalRecovered = 0
+                                    let totalDeaths = 0
+                                    let peopleTested = 0
+                                    features.forEach(feature => {
+                                        let atts = feature.attributes;
+                                        totalCases += atts['Confirmed'];
+                                        totalRecovered += atts['Recovered'];
+                                        totalDeaths += atts['Deaths'];
+                                        peopleTested += atts['People_Tested'];
+                                    })
+                                    let deathRate=totalDeaths/totalCases;
+                                    return {
+                                        totalCases,
+                                        totalRecovered,
+                                        totalDeaths,
+                                        peopleTested,
+                                        deathRate
+                                    }
+                                }
+                    
+                                const statsDiv = (stats) => {
+                                    console.log({
+                                        stats
+                                    });
+                                    let {
+                                        totalCases,
+                                        totalRecovered,
+                                        totalDeaths,
+                                        peopleTested,
+                                        deathRate
+                                    } = stats;
+                                    let contentArr = [{
+                                        title: 'Total Cases',
+                                        value: totalCases,
+                                        class: 'text-primary',
+                                    }, 
+                                    // {
+                                    //     title: 'Total Recovered',
+                                    //     value: totalRecovered,
+                                    //     class: 'text-success',
+                                    // }
+                                    ,
+                                     {
+                                        title: 'Deaths',
+                                        value: totalDeaths,
+                                        class: 'text-danger',
+                                    },
+                    
+                                    {
+                                        title: 'Death %',
+                                        value: deathRate.toFixed(4),
+                                        class: 'text-warning',
+                                    }
+                                    ]
+                                    const content = contentArr.map(field => {
+                                        return `<p class="font-weight-bold">${field.title}: <span class="${field.class}">${field.value}</span></p>`
+                                    }).join('')
+                                    const titleContent = document.createElement("div");
+                                    titleContent.style.padding = "15px";
+                                    titleContent.style.backgroundColor = "white";
+                                    titleContent.style.width = "300px";
+                                    titleContent.innerHTML = "<div id='title' class='esri-widget'>" +
+                                        "<span class='font-weight-bold'>COVID-19 GA Totals and Stats </span> <br></br>" +
+                                        content + "</div>"
+                    
+                    
+                                    const titleExpand = new Expand({
+                                        expandIconClass: "esri-icon-dashboard",
+                                        expandTooltip: "Summary Stats",
+                                        view: view,
+                                        // autoCollapse:true,
+                                        content: titleContent,
+                                        expanded: view.widthBreakpoint !== "small" && view.widthBreakpoint !== "xsmall"
+                                    });
+                                    return titleExpand;
+                                }
+                    
+                                getGraphics().then(features => {
+                                    console.log('feats', features);
+                    
+                    
+                    
+                                    var uniqueRenderer = {
+                                        type: "unique-value", // autocasts as new UniqueValueRenderer()
+                                        valueExpression: "IIF($feature.Deaths > 0,'true','false')",
+                                        uniqueValueInfos: [{
+                                            // All features with value of "North" will be blue
+                                            value: "true",
+                                            label: 'Deaths Reported',
+                                            symbol: {
+                                                type: "simple-fill", // autocasts as new SimpleFillSymbol()
+                                                color: [21, 85, 98],
+                                                outline: {
+                                                    // autocasts as new SimpleLineSymbol()
+                                                    color: [255, 0, 0, .8],
+                                                    width: 1
+                                                }
+                                            }
+                                        }, {
+                                            // All features with value of "East" will be green
+                                            value: "false",
+                                            label: "No Fatalaties",
+                                            symbol: {
+                                                type: "simple-fill", // autocasts as new SimpleFillSymbol()
+                                                color: [21, 85, 98],
+                                                outline: {
+                                                    // autocasts as new SimpleLineSymbol()
+                                                    color: [128, 128, 128, 0.4],
+                                                    width: 1
+                                                }
+                    
+                                            }
+                                        }],
+                                        visualVariables: [{
+                                            type: "opacity",
+                                            field: "Confirmed",
+                                            label: "Confirmed Cases",
+                                            // normalizationField: "POPULATION",
+                                            // features with 30 ppl/sq km or below are assigned the first opacity value
+                                            stops: [{
+                                                    value: 0,
+                                                    opacity: 0,
+                                                    label: 'No Cases'
+                                                },
+                                                {
+                                                    value: 100,
+                                                    opacity: 0.2,
+                                                    label: ' < 100'
+                                                },
+                                                {
+                                                    value: 500,
+                                                    opacity: 0.4,
+                                                    label: ' < 500'
+                                                },
+                                                {
+                                                    value: 1000,
+                                                    opacity: 0.6,
+                                                    label: ' < 1000'
+                                                },
+                                                {
+                                                    value: 5000,
+                                                    opacity: 0.8,
+                                                    label: ' < 5000'
+                                                }, {
+                                                    value: 5001,
+                                                    opacity: 1,
+                                                    label: ' 5000 +'
+                                                }
+                                            ]
+                                        }]
+                                    };
+                                    let covidLayer = new FeatureLayer({
+                                        objectIdField: "OBJECTID",
+                                        title: 'COVID-19 Georgia by County',
+                                        source: features,
+                                        popupTemplate: {
+                                            title: "{COUNTY} County",
+                                            outFields: ["*"],
+                                            content: displayContent,
+                                        },
+                                        fields: [{
+                                                name: 'OBJECTID',
+                                                type: 'oid'
+                                            },
+                                            {
+                                                name: 'Confirmed',
+                                                type: 'integer'
+                                            },
+                                            {
+                                                name: 'Deaths',
+                                                type: 'integer'
+                                            },
+                                            {
+                                                name: 'POPULATION',
+                                                type: 'integer'
+                                            },
+                                            {
+                                                name: 'COUNTY',
+                                                type: 'string'
+                                            }
+                                        ],
+                                        renderer: uniqueRenderer,
+                                        labelingInfo: [countyLabels]
+                                    });
+                                    map.add(covidLayer);
+                                    covidLayer.when(function() {
+                                        console.log(covidLayer, 'covid')
+                                    })
+                    
+                                    // view.when(function() {
+                                    //     // get the first layer in the collection of operational layers in the WebMap
+                                    //     // when the resources in the MapView have loaded.
+                                    //     var featureLayer = new GraphicsLayer(view.graphics);
+                                    //     console.log(feautureLayer);
+                    
+                                    var legend = new Legend({
+                                        view: view,
+                                        layerInfos: [{
+                                            layer: covidLayer,
+                                            title: "COVID-19 in GA"
+                                        }]
+                                    });
+                    
+                                    //     // Add widget to the bottom right corner of the view
+                                    view.ui.add(legend, "bottom-right");
+                                    const stats = statsDiv(getStats(features))
+                                    view.ui.add(stats, 'top-left');
+                                    // });
+                    
+                    
+                                    // view.graphics.addMany(covidGraphics);
+                                    // view.on("hover", function(event) {
+                                    //     view.hitTest(event)
+                                    //         .then(function(response) {
+                                    //             // do something with the result graphic
+                                    //             console.log(response.results[0].graphic);
+                                    //             response.results[0].graphic.symbol.outline.color="blue";
+                                    //             view.popup.open({
+                                    //             });
+                                    //         });
+                                    // });
+                                    var zoomToLayer = (layer) => {
+                                        return layer.queryExtent().then(function(response) {
+                                            view.goTo(response.extent);
+                                        });
+                                    }
+                                    countyLayer
+                                        .when(function() {
+                                            countyLayer.definitionExpression = "STATE='GA'";
+                                            return zoomToLayer(countyLayer);
+                                        });
+                                    var legend = new Legend({
+                                        view: view,
+                                        container: "legendDiv"
+                                    });
+                                    view.watch("widthBreakpoint", function(breakpoint) {
+                                        console.log('breakpoint', breakpoint);
+                                        // switch (breakpoint) {
+                                        //     case "xsmall":
+                                        //     case "small":
+                                        //         view.ui.move(legend,'top-right')
+                                        //         break;
+                                        //     default:
+                                        // }
+                                    });
+                    
+                                    const logoLink = document.createElement('a');
+                                    logoLink.setAttribute('href', 'https://mccormicksolutions.com');
+                                    logoLink.setAttribute('target', '_blank');
+                                    const logo = document.createElement('img');
+                                    logo.src = 'https://mccormicksolutions.com/logo.png';
+                                    logo.style.height = '50px';
+                                    logo.style.width = 'auto';
+                                    logoLink.appendChild(logo);
+                                    view.ui.add([{
+                                        component: logoLink,
+                                        position: 'bottom-left'
+                                    }]);
+                    
+                                    var infoDiv = document.getElementById("infoDiv");
+                                })
+                    
+                            });
+                    </script>
+                    
+                    <div class="container-fluid" style="height:90vh">
+                        <div id="viewDiv">
+                    
+                        </div>
+                        <div id="infoDiv" class="esri-widget">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
