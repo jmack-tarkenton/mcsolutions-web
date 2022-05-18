@@ -1,73 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Modern Business - Start Bootstrap Template</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    </head>
-    <body class="d-flex flex-column">
-        <main class="flex-shrink-0">
-            <!-- Navigation-->
-            <nav id="nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>
+        McCormick Solutions
+    </title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
 
-            </nav>
-            <!-- Header-->
-            <header class="py-5">
-                <div class="container px-5">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8 col-xxl-6">
-                            <div class="text-center my-5">
-                                <h1 class="fw-bolder mb-3">Our mission is to make building websites easier for everyone.</h1>
-                                <p class="lead fw-normal text-muted mb-4">Start Bootstrap was built on the idea that quality, functional website templates and themes should be available to everyone. Use our open source, free products, or support us by purchasing one of our premium products or services.</p>
-                                <a class="btn btn-primary btn-lg" href="#scroll-target">Read our story</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css" />
+
+
+    <script src="https://js.arcgis.com/4.14/"></script>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            margin-top: 3;
+            height: 75vh;
+            width: 100%;
+            margin: 0;
+            padding: 10;
+            min-height: 100%;
+        }
+
+        #infoDiv {
+            background: black;
+            padding: 10px;
+        }
+
+        #map-holder {
+            min-height: 50vh;
+        }
+
+        .esri-legend {
+            max-width: 50%
+        }
+
+        .esri-legend__layer-body div:nth-child(3) {
+            display: none;
+        }
+
+        @media only screen and (max-width: 460px) {
+            .esri-legend {
+                max-width: 100%
+            }
+        }
+    </style>
+
+    <script>
+        let mount = async function (Map, MapView, FeatureLayer, Legend, Expand, Graphic, PopupTemplate, ClassBreaksRenderer, opacityVariableCreator, classBreaks, GeoJSONLayer, LabelClass) {
+
+
+            var counties = {
+                active: [
+                    'Dawson',
+                    'Gwinnett',
+                    'Dade',
+                    'Greene',
+                    'Walker',
+                    
+                ],
+                inActive: [],
+            }
+
+            var projects = {
+                'Dawson': 'Commercial Schedules',
+                'Gwinnett': 'Market Modeling and Data Analysis',
+                'Dade': 'Desk Review of Residential properties',
+                'Greene': 'County Wide Revaluation',
+                'Lumpkin': 'TBD',
+            }
+
+            var map = new Map({
+                basemap: "gray-vector",
+                showLabels: true
+
+            });
+            var view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [-83.441162, 33.247875],
+                zoom: 3,
+            });
+
+            function countyString(countyType) {
+                let string = '';
+                countyType.forEach((county, i) => {
+                    string += i === 0 ? `'${county}'` : `,'${county}'`
+                });
+                return string;
+            }
+            var allCounties = countyString([...counties.active, ...counties.inActive])
+            var activeCounties = countyString(counties.active);
+            var inActiveCounties = countyString(counties.inActive);
+
+            var definitionExpression = `STATE='GA' AND COUNTY in (${allCounties})`
+            console.log({
+                definitionExpression
+            })
+
+
+
+            // let countyLayer = new FeatureLayer({
+            //     url: "https://arcgis.atlantaregional.com/arcgis/rest/services/OpenData/FeatureServer/68",
+
+            //     // definitionExpression:definitionExpression,
+            //     outFields: ["*"],
+            //     // renderer:renderer,
+            //     // labelsVisible: true,
+            //     // labelingInfo: [countyLabels]
+
+            // });
+            let countyLayer = new FeatureLayer({
+                url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/counties_politics_poverty/FeatureServer/0",
+                definitionExpression,
+                outFields: ["*"],
+
+            });
+
+
+            console.log({
+                countyLayer
+            })
+
+
+
+
+            // async function queryAttributes(layer) {
+            //     var layerQuery = layer.createQuery();
+            //     return layer.queryFeatures(layerQuery).then(function(response) {
+            //         covidFeatures = response.features.map(function(feature) {
+            //             return feature
+            //         });
+            //         return covidFeatures;
+            //     });
+            // }
+
+
+
+
+
+            var countyQuery = countyLayer.createQuery();
+            countyQuery.definitionExpression = definitionExpression;
+            let gaCounties = await countyLayer.queryFeatures(countyQuery)
+            // let LMC_Counties = georgiaCounties.features.filter(function(feature) {
+            //     return allCounties.includes(feature.properties.NAME10)
+            // });
+            // LMC_Counties = LMC_Counties.map(county => {
+            //     county.geometry.type = 'polygon';
+            //     return county
+            // })
+
+            console.log({
+                gaCounties
+            });
+            let LMC_Counties = gaCounties.features.filter(feature => {
+                return allCounties.includes(feature.attributes.COUNTY)
+            })
+            console.log({
+                LMC_Counties
+            })
+
+
+            console.log({
+                LMC_Counties
+            })
+
+            let countyGraphics = LMC_Counties.map(feature => {
+                console.log({
+                    feature
+                })
+                let {
+                    attributes,
+                    geometry
+                } = feature
+                attributes.Status = counties.active.includes(attributes.COUNTY) ? 'Active' : 'Prior'
+                let graphic = new Graphic({
+                    attributes,
+                    geometry
+                })
+                return graphic
+
+            })
+            // counties.type='polygon';
+            const geometryType = 'polygon'
+            // georgiaCounties.features = LMC_Counties;
+
+            console.log({
+                countyGraphics
+            }, 'post-filter and post-map');
+
+            const countyAttributes = countyGraphics.properties;
+
+            var activeSymbol = {
+                type: "simple-fill",
+                outline: {
+                    width: 1.25
+                },
+                color: [32, 213, 75, 0.25]
+            };
+
+            var inActiveSymbol = {
+                type: "simple-fill",
+                outline: {
+                    width: 1.25
+                },
+                color: [161, 81, 18, 0.25]
+            }
+
+
+            var renderer = {
+                type: "unique-value", // autocasts as new UniqueValueRenderer()
+                field: "Status",
+                defaultSymbol: {
+                    type: "simple-fill"
+                }, // autocasts as new SimpleFillSymbol()
+                uniqueValueInfos: [{
+                    value: "Active",
+                    symbol: activeSymbol
+                }, {
+                    value: "Prior",
+                    symbol: inActiveSymbol
+                }],
+                // visualVariables: [{
+                //     type: "opacity",
+                //     field: "POPULATION",
+                //     normalizationField: "SQ_KM",
+                //     // features with 30 ppl/sq km or below are assigned the first opacity value
+                //     stops: [{
+                //             value: 100,
+                //             opacity: 0.15
+                //         },
+                //         {
+                //             value: 1000,
+                //             opacity: 0.90
+                //         }
+                //     ]
+                // }]
+            };
+            // var symbol = {
+            //     type: "simple", // autocasts as new UniqueValueRenderer()
+            //     symbol: {
+            //         // type: 'simple-fill',
+            //         // color: [51, 51, 204, 0.9],
+            //         // style: "solid",
+            //         // outline: { // autocasts as new SimpleLineSymbol()
+            //         //     color: "white",
+            //         //     width: 1
+            //         // }
+            //         type: "simple-fill",
+            //         outline: {
+            //             cap: "round",
+            //             width: 1.25,
+            //             color: [236, 83, 83, 1]
+            //         },
+            //         color: [53, 223, 102, 0.25]
+            //     }
+
+            // }
+            // labelClasses = countyAttributes.map()
+            var countyLabels = {
+                symbol: {
+                    type: "text",
+                    color: "#FFFFFF",
+                    haloColor: "black",
+                    haloSize: "2px",
+                    font: {
+                        size: "12px",
+                        family: "Noto Sans",
+                        // style: "italic",
+                        weight: "normal"
+                    },
+
+                },
+                labelPlacement: "always-horizontal",
+                labelExpressionInfo: {
+                    expression: "$feature.COUNTY"
+                }
+            };
+
+            const LMCcountyLayer = new FeatureLayer({
+                source: countyGraphics,
+                geometryType,
+                title: 'LMC_Counties',
+                popupTemplate: {
+                    title: "{COUNTY} County",
+                    content: 'none',
+                },
+                fields: [{
+                    name: "OBJECTID",
+                    alias: "ObjectID",
+                    type: "oid"
+                }, {
+                    name: "COUNTY",
+                    alias: "COUNTY",
+                    type: "string"
+                }, {
+                    name: "STATE",
+                    alias: "STATE",
+                    type: "string"
+                }, {
+                    name: 'Status',
+                    type: "string",
+                }],
+                objectIdField: "ObjectID",
+                spatialReference: {
+                    wkid: 4326
+                },
+                renderer,
+                labelingInfo: [countyLabels],
+
+            })
+            map.add(LMCcountyLayer);
+
+            // countyLayer.labelingInfo = countyLabels;
+            // countyLayer.definitionExpression = `STATE='GA' and COUNTY in (${activeCounties})`;
+
+            var legend = new Legend({
+                view: view,
+                layerInfos: [{
+                    layer: LMCcountyLayer,
+                    title: "Project Status"
+                }]
+            });
+            view.ui.add(legend, "bottom-right");
+            LMCcountyLayer.when(function () {
+                console.log({
+                    LMCcountyLayer
+                }, 'postload')
+
+                if (LMCcountyLayer.capabilities.query.supportsExtent) {
+                    return zoomToLayer(LMCcountyLayer)
+                }
+            })
+            var zoomToLayer = async (layer) => {
+                let response = await layer.queryExtent();
+                console.log({
+                    response
+                });
+                return view.goTo(response.extent);
+
+            }
+
+
+
+            console.log({
+                map
+            }, {
+                view
+            })
+
+
+        };
+
+        let esriModules = require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/FeatureLayer",
+            "esri/widgets/Legend",
+            "esri/widgets/Expand",
+            "esri/Graphic",
+            "esri/PopupTemplate",
+            "esri/renderers/ClassBreaksRenderer",
+            "esri/renderers/smartMapping/creators/opacity",
+            "esri/renderers/smartMapping/statistics/classBreaks",
+            "esri/layers/GeoJSONLayer",
+            "esri/layers/support/LabelClass"
+
+        ], function (...args) {
+
+            mount(...args)
+
+        });
+    </script>
+</head>
+
+<body class="d-flex flex-column">
+
+    
+    <main class="flex-shrink-0">
+        <!-- Navigation-->
+        <nav id="nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+        </nav>
+        <!-- Header-->
+        <header class="py-5">
+            <div class="container px-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="text-center my-5">
+                            <h1 class="display-3 font-weight-bold mt-3"><img src="./assets/logo.png" class="logo-small" /></h1>
+            <p class="lead d-lg-block d-xl-block">
+                At McCormick, you can trust that you are dealing with experienced and qualified individuals.
+                From the top down, each member has years of experience in tax assessment, and each member has worked in multiple county environments.
+                We have past Chief Appraisers and Deputy Chief Appraisers on staff that understand the pain points of county offices.
+                Our analytical and technology team allow us to think outside of the box and provide features, interactive dashboards, and task automation to help with
+                otherwise cumbersome workflows. We are equipped to help with all things tax assessment, analysis, GIS, and software/web development.
+                <br><br />
+                <span class="font-weight-bold">Learn how our team can change the way you face problems.</span>
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- About section one-->
+        <!-- <section class="py-5 bg-light" id="scroll-target">
+            <div class="container px-5 my-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-6"><img class="img-fluid rounded mb-5 mb-lg-0" src="./assets/staff/group.jpg"
+                            alt="group" /></div>
+                    <div class="col-lg-6">
+                        <h2 class="fw-bolder">Our founding</h2>
+                        <p class="lead fw-normal text-muted mb-0">Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Iusto est, ut esse a labore aliquam beatae expedita. Blanditiis impedit numquam libero
+                            molestiae et fugit cupiditate, quibusdam expedita, maiores eaque quisquam.</p>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+        <!-- About section two-->
+        <section class="py-5">
+            <div class="container px-5 my-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-6 order-first order-lg-last">
+                        <div class="col-sm-12 mx-auto text-center" id="map-holder">
+                            <div id="viewDiv">
+
                             </div>
                         </div>
                     </div>
-                </div>
-            </header>
-            <!-- About section one-->
-            <section class="py-5 bg-light" id="scroll-target">
-                <div class="container px-5 my-5">
-                    <div class="row gx-5 align-items-center">
-                        <div class="col-lg-6"><img class="img-fluid rounded mb-5 mb-lg-0" src="./assets/staff/group.jpg" alt="group" /></div>
-                        <div class="col-lg-6">
-                            <h2 class="fw-bolder">Our founding</h2>
-                            <p class="lead fw-normal text-muted mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto est, ut esse a labore aliquam beatae expedita. Blanditiis impedit numquam libero molestiae et fugit cupiditate, quibusdam expedita, maiores eaque quisquam.</p>
-                        </div>
+                    <div class="col-lg-6">
+                        <h2 class="fw-bolder">Current Clients</h2>
+                        <p class="lead fw-normal text-muted mb-0">
+                            McCormick Solutions is proud to serve the state of Georgia in all things tax assessment. 
+                        </p>
                     </div>
                 </div>
-            </section>
-            <!-- About section two-->
-            <section class="py-5">
-                <div class="container px-5 my-5">
-                    <div class="row gx-5 align-items-center">
-                        <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="./assets/dawson.jpg" alt="presentation" /></div>
-                        <div class="col-lg-6">
-                            <h2 class="fw-bolder">Growth &amp; beyond</h2>
-                            <p class="lead fw-normal text-muted mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto est, ut esse a labore aliquam beatae expedita. Blanditiis impedit numquam libero molestiae et fugit cupiditate, quibusdam expedita, maiores eaque quisquam.</p>
-                        </div>
-                    </div>
+            </div>
+        </section>
+        <!-- Team members section-->
+        <section class="py-5 bg-light">
+            <div class="container px-5 my-5">
+                <div class="text-center">
+                    <h2 class="fw-bolder">Our team</h2>
+                    <p class="lead fw-normal text-muted mb-5">Dedicated to quality and your success</p>
                 </div>
-            </section>
-            <!-- Team members section-->
-            <section class="py-5 bg-light">
-                <div class="container px-5 my-5">
-                    <div class="text-center">
-                        <h2 class="fw-bolder">Our team</h2>
-                        <p class="lead fw-normal text-muted mb-5">Dedicated to quality and your success</p>
-                    </div>
-                    <div id="employees" class="row gx-5 row-cols-1 row-cols-sm-2 row-cols-xl-4 justify-content-center">
-                        <!-- <div class="col mb-5 mb-5 mb-xl-0">
+                <!-- <div id="employees" class="row gx-5 row-cols-1 row-cols-sm-2 row-cols-xl-4 justify-content-center"> -->
+                <div id="employees" class="row row-cols-1 row-cols-md-4 g-4">
+
+
+
+                    <!-- <div class="col mb-5 mb-5 mb-xl-0">
                             <div class="text-center">
                                 <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/150x150/ced4da/6c757d" alt="..." />
                                 <h5 class="fw-bolder">Ibbie Eckart</h5>
@@ -95,16 +491,17 @@
                                 <div class="fst-italic text-muted">CTO</div>
                             </div>
                         </div> -->
-                    </div>
                 </div>
-            </section>
-        </main>
-        <!-- Footer-->
-       
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-        <script src="js/app.js"></script>
-    </body>
+            </div>
+        </section>
+    </main>
+    <!-- Footer-->
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
 </html>

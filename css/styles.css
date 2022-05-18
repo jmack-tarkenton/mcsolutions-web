@@ -10993,3 +10993,17 @@ html {
       bottom: 0;
       width: 100%;
   }
+
+  .card-img-top {
+    width: 100%;
+    height: 25vw;
+    object-fit: cover;
+}
+.logo-small{
+	max-height:8vh;
+		vertical-align: unset !important;
+}
+.img-thumbnail{
+	max-height:50vh !important;
+
+}
