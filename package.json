@@ -1,0 +1,15 @@
+{
+  "name": "McSolutions",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/jtmccormick18/mcsolutions-web.git",
+  "author": "jtmccormick18 <josh.mccormick81@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "path": "^0.12.7"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
