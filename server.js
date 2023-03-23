@@ -17,7 +17,7 @@ app.use("/",function(req,res){
 
 const server=http.createServer(app);
 
-app.listen();
+server.listen();
 
 // app.listen(PORT, function() {
 //   console.log(`App listening on PORT ${PORT}`);
