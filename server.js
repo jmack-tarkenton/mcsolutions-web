@@ -1,6 +1,7 @@
 const express = require("express");
 const path=require("path");
 const app = express();
+const http=require("http");
 
 const PORT = process.env.PORT || 8080;
 
@@ -14,6 +15,10 @@ app.use("/",function(req,res){
     res.sendFile(path.join(__dirname, "client-static", "index.html"));
 })
 
-app.listen(PORT, function() {
-  console.log(`App listening on PORT ${PORT}`);
-});
+const server=http.createServer(app);
+
+app.listen();
+
+// app.listen(PORT, function() {
+//   console.log(`App listening on PORT ${PORT}`);
+// });
