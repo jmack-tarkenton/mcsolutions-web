@@ -12,10 +12,11 @@
     "acme-http-01-standalone": "^3.0.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "greenlock": "^4.0.4",
+    "greenlock": "^v3",
     "greenlock-express": "^4.0.3",
     "greenlock-store-fs": "^3.2.2",
     "http-proxy": "^1.18.1",
+    "le-challenge-fs": "^2.0.9",
     "path": "^0.12.7"
   },
   "scripts": {

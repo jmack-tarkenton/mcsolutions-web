@@ -36,6 +36,9 @@
     "accountKeyType": "EC-P256",
     "serverKeyType": "RSA-2048",
     "subscriberEmail": "josh.mccormick@mccormicksolutions.com",
-    "agreeToTerms": true
+    "agreeToTerms": true,
+    "domains": [
+      "mccormicksolutions.com"
+    ]
   }
 }

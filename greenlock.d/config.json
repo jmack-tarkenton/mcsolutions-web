@@ -23,12 +23,14 @@
     }
   ],
   "defaults": {
-    "store": {
-      "module": "greenlock-store-fs"
-    },
+    "store": {},
     "challenges": {
       "http-01": {
-        "module": "acme-http-01-standalone"
+        "_options": {
+          "webrootPath": "/tmp/acme-challenges",
+          "loopbackTimeout": 5000,
+          "debug": false
+        }
       }
     },
     "renewOffset": "-45d",
@@ -36,6 +38,9 @@
     "accountKeyType": "EC-P256",
     "serverKeyType": "RSA-2048",
     "subscriberEmail": "josh.mccormick@mccormicksolutions.com",
-    "agreeToTerms": true
+    "agreeToTerms": true,
+    "domains": [
+      "mccormicksolutions.com"
+    ]
   }
 }

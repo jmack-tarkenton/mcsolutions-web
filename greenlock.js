@@ -1,85 +1,73 @@
-var pkg = require('./package.json');
-var Greenlock = require('greenlock-express');
+const path = require('path');
+const pkg = require('./package.json');
+const Greenlock = require('greenlock');
 
-var dns01 = require('acme-dns-01-godaddy').create({
-    baseUrl: 'https://api.godaddy.com/v1', // default
-    key: process.env.GoDaddy_Key,
-    secret: process.env.GoDaddy_Secret
-});
+const ACME_SERVER_URL = 'https://acme-v02.api.letsencrypt.org/directory'; // Use this URL for production
 
-var greenlock = Greenlock.init({
+const DOMAIN_NAME = 'mccormicksolutions.com';
+
+const greenlock = Greenlock.create({
+    version: 'draft-12',
+    server: ACME_SERVER_URL,
     packageRoot: __dirname,
     configDir: "./greenlock.d/",
     packageAgent: pkg.name + '/' + pkg.version,
     maintainerEmail: "josh.mccormick@mccormicksolutions.com",
-    staging: true,
+   
     notify: function (event, details) {
         if ('error' === event) {
             // `details` is an error object in this case
             console.error(details);
         }
     },
-    proxy: {
-        "local.host": "http://localhost:3000",
+    // store: require('greenlock-store-fs'),
+    approveDomains: (opts, certs, cb) => {
+        cb(null, {
+            options: opts,
+            certs: certs
+        });
     },
-    challenges: {
-        "*.mccormicksolutions.com": dns01,
-        "*local.host": {
-            "module": require("acme-http-01-standalone")
-        }
-    }
+    staging: false,
+    debug: false
 });
 
-
-
-const serverNames = ["mccormicksolutions.com", "local.host"];
-
-// greenlock.manager
-//     .defaults({
-//         agreeToTerms: true,
-//         subscriberEmail: 'josh.mccormick@mccormicksolutions.com'
-//     })
+// greenlock.manager.defaults({
+//     subscriberEmail: 'josh.mccormick@mccormicksolutions.com',
+//     agreeToTerms: true,
+//     // store: require('greenlock-store-fs'),
+//     challenges: {
+//         // 'http-01': require('le-challenge-fs').create({
+//         //     webrootPath: '/tmp/acme-challenges'
+//         // }),
+//         "http-01": {
+//             module: "acme-http-01-webroot",
+//             webroot: "/path/to/webroot"
+//           }
+//     }
+// })
 //     .then(async function (fullConfig) {
 //         // ...
 //         console.log({ fullConfig });
 
-//         serverNames.forEach(async (subject) => {
-//             try {
-//                 const site = await greenlock.get({ servername: subject });
-//                 const { pems } = site;
-//                 if (pems && pems.privkey && pems.cert && pems.chain) {
-//                     console.info('Success');
-//                 }
-//                 console.log({ site, pems });
-//             } catch (e) {
-
-//                 console.error('Big bad error:', e.code);
-//                 console.error(e);
-
-//             }
 
 
-//         })
-//         // greenlock.get({ servername: subject })
-//         // .then(function (pems) {
-//         //     if (pems && pems.privkey && pems.cert && pems.chain) {
-//         //         console.info('Success');
-//         //     }
-//         //     //console.log(pems);
-//         // })
-//         // .catch(function (e) {
-//         //     console.error('Big bad error:', e.code);
-//         //     console.error(e);
-//         // });
-//     });
-
-module.exports = greenlock;
-
-// greenlock.manager
-//     .defaults({
-//         agreeToTerms: true,
-//         subscriberEmail: 'webhosting@example.com'
 //     })
-//     .then(function(fullConfig) {
-//         // ...
-//     });
+//     .catch(err => console.error({ err }));
+
+(async () => {
+    try {
+        const site = await greenlock.get({ servername: DOMAIN_NAME });
+        console.log({ site });
+        const { pems } = site;
+        console.log({ site, pems });
+        if (pems && pems.privkey && pems.cert && pems.chain) {
+            console.info('Success');
+            console.info({ 'cert': pems.cert, key: pems.privkey })
+        }
+    } catch (e) {
+
+        console.error('Big bad error:', e.code);
+        console.error(e);
+
+    }
+})();
