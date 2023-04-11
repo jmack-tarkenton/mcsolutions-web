@@ -1,24 +1,15 @@
-const express = require("express");
-const path=require("path");
-const app = express();
-const http=require("http");
-
-const PORT = process.env.PORT || 8080;
+// const http = require("http");
+require('dotenv').config();
 
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "client-static")));
+const app = require('./app');
 
-app.use("/",function(req,res){
-    res.sendFile(path.join(__dirname, "client-static", "index.html"));
-})
+const greenlock=require('./greenlock');
 
-const server=http.createServer(app);
 
-server.listen();
+// require('./app');
 
-// app.listen(PORT, function() {
-//   console.log(`App listening on PORT ${PORT}`);
-// });
+// require('./greenlock');
+
+greenlock.serve(app);
