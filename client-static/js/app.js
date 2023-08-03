@@ -27,12 +27,7 @@ var employees = [
     postion: "Project Manager",
     image: "amber.jpg",
   },
-  {
-    firstName: "Josh",
-    lastName: "Vaughan",
-    postion: "Lead Field Appraiser",
-    image: "josh_v.jpg",
-  },
+
   {
     firstName: "Adam",
     lastName: "Vaughan",
@@ -45,6 +40,18 @@ var employees = [
     postion: "Field Appraiser",
     image: "jim.jpg",
   },
+  {
+    firstName: "Jacob",
+    lastName:"Rickett",
+    postion: "Field Appraiser",
+    image: "jacob_rickett.jpg",
+  },
+  {
+    firstName: "Ethan",
+    lastName: "Delong",
+    postion: "Field Appraiser",
+    image: "ethan_delong.jpg",
+  }
 ];
 
 // employees.forEach((employee) => {
