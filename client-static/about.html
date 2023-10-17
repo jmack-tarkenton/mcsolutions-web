@@ -112,9 +112,7 @@
             var inActiveCounties = countyString(counties.inActive);
 
             var definitionExpression = `STATE='GA' AND COUNTY in (${allCounties})`
-            console.log({
-                definitionExpression
-            })
+           
 
 
 
@@ -136,9 +134,7 @@
             });
 
 
-            console.log({
-                countyLayer
-            })
+        
 
 
 
@@ -168,15 +164,10 @@
             //     return county
             // })
 
-            console.log({
-                gaCounties
-            });
             let LMC_Counties = gaCounties.features.filter(feature => {
                 return allCounties.includes(feature.attributes.COUNTY)
             })
-            console.log({
-                LMC_Counties
-            })
+         
 
 
             console.log({
@@ -342,9 +333,7 @@
             });
             view.ui.add(legend, "bottom-right");
             LMCcountyLayer.when(function () {
-                console.log({
-                    LMCcountyLayer
-                }, 'postload')
+             
 
                 if (LMCcountyLayer.capabilities.query.supportsExtent) {
                     return zoomToLayer(LMCcountyLayer)
@@ -352,20 +341,10 @@
             })
             var zoomToLayer = async (layer) => {
                 let response = await layer.queryExtent();
-                console.log({
-                    response
-                });
+               
                 return view.goTo(response.extent);
 
             }
-
-
-
-            console.log({
-                map
-            }, {
-                view
-            })
 
 
         };
@@ -464,7 +443,7 @@
                     <p class="lead fw-normal text-muted mb-5">Dedicated to quality and your success</p>
                 </div>
                 <!-- <div id="employees" class="row gx-5 row-cols-1 row-cols-sm-2 row-cols-xl-4 justify-content-center"> -->
-                <div id="employees" class="row row-cols-1 row-cols-md-4 g-4">
+                <div id="employees" class="row row-cols-1 row-cols-md-3 g-4">
 
 
 

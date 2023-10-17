@@ -51,25 +51,20 @@ var employees = [
     lastName: "Delong",
     postion: "Field Appraiser",
     image: "ethan_delong.jpg",
-  }
+  },
+   {
+    firstName:"Cody",
+    lastName: "Samples",
+    postion: "Field Appraiser",
+    image: "cody_samples.jpg",
+   }
 ];
 
-// employees.forEach((employee) => {
-//   $("#employees").append(`
-//     <div class="col mb-5 mb-5 mb-xl-0">
-//                             <div class="text-center">
-//                                 <img class="img-fluid rounded-circle mb-4 px-4" src="./assets/staff/${employee.image}" alt="${employee.firstName}" style="height:150px !important; width:auto !important" />
-//                                 <h5 class="fw-bolder">${employee.firstName} ${employee.lastName}</h5>
-//                                 <div class="fst-italic text-muted">${employee.postion}</div>
-//                             </div>
-//                         </div>
-//     `);
-// });
 
 employees.forEach((employee) => {
   $("#employees").append(`
   <div class="col">
-  <div class="card text-white bg-dark mb-3 h-100" style="width: 18rem;">
+  <div class="card text-white bg-dark mb-3" >
   <img src="./assets/staff/${employee.image}" alt="${employee.firstName}" class="card-img-top">
   <div class="card-body">
     <h5 class="card-title">${employee.firstName} ${employee.lastName}</h5>
@@ -79,6 +74,7 @@ employees.forEach((employee) => {
 </div>
     `);
 });
+
 
 const nav = `
 <div class="container px-5">
