@@ -1,0 +1,73 @@
+$--colors: (
+  'primary': (
+    'base': #044559,
+  ),
+  'success': (
+    'base': #64B19F,
+  ),
+  'error': (
+    'base': #C73347,
+  ),
+  'danger': (
+    'base': #C73347,
+  ),
+  'warning': (
+    'base': #E7C723
+  ),
+  'caution': (
+    'base': #E7C723
+  )
+);
+
+$--text-color: (
+  'primary': #303133,
+  'regular': #606266,
+  'secondary': #909399,
+  'placeholder': #a8abb2,
+  'disabled': #c0c4cc,
+);
+
+
+$--fill-color: (
+  '': #f0f2f5,
+  'light': #f5f7fa,
+  'lighter': #fafafa,
+  'extra-light': #fafcff,
+  'dark': #ebedf0,
+  'darker': #e6e8eb,
+  'blank': #ffffff,
+);
+
+$--bg-color: (
+  '': #ffffff,
+  'page': #f2f3f5,
+  'overlay': #ffffff,
+);
+
+$--font-family: (
+  // default family
+  '':
+  "WorkSans, Open Sans",
+  'Alt':
+  "RecoletaAlt"
+);
+
+$--font-size: (
+  'extra-large': 22px,
+  'large': 20px,
+  'medium': 18px,
+  'base': 16px,
+  'small': 15px,
+  'extra-small': 14px,
+);
+
+$--el-input-border-color: #6799A8;
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: $--colors,
+  $text-color: $--text-color,
+  $fill-color: $--fill-color,
+  $bg-color: $--bg-color,
+  $font-family: $--font-family,
+  $font-size: $--font-size,
+);
