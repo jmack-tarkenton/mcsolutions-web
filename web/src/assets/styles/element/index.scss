@@ -23,7 +23,7 @@ $--colors: (
 );
 
 $--text-color: (
-        'primary': #303133,
+        'primary': #070505,
         'regular': #606266,
         'secondary': #909399,
         'placeholder': #a8abb2,
@@ -42,9 +42,9 @@ $--fill-color: (
 );
 
 $--bg-color: (
-        '': #ffffff,
-        'page': #f2f3f5,
-        'overlay': #ffffff,
+        '': #424141,
+        'page': #c5c3c3,
+        'overlay': #040c0c,
 );
 
 $--font-family: (
@@ -74,3 +74,4 @@ $--el-input-border-color: #6799A8;
   $font-family: $--font-family,
   $font-size: $--font-size,
 );
+

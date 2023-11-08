@@ -2,9 +2,9 @@ import type { RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 
 export enum RouteNames {
-  Home = '',
-  About = 'about',
-  Contact = 'contact',
+  Home = 'Home',
+  About = 'About',
+  Contact = 'Contact',
 }
 
 const routes: Array<RouteRecordRaw> = [

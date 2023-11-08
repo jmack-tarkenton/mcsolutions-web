@@ -1,5 +1,6 @@
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import UnoCSS from 'unocss/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import ElementPlus from 'unplugin-element-plus/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
@@ -25,6 +26,7 @@ export default defineConfig({
   plugins: [
     vue(),
     tsconfigPaths(),
+    UnoCSS(),
     // AutoImport({
     //   resolvers: [ElementPlusResolver()],
     // }),
