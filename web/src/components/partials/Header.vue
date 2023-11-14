@@ -25,7 +25,7 @@
       @select="handleSelect"
       router
     >
-      <el-row justify="space-evenly" class="px-3">
+      <el-row justify="center" class="px-3">
         <el-menu-item :index="RouteNames.Home" :route="{ name: RouteNames.Home }">
           Home
         </el-menu-item>
@@ -34,7 +34,7 @@
           >About
         </el-menu-item>
         <el-menu-item :index="RouteNames.Contact" :route="{ name: RouteNames.Contact }">
-          Contact Us
+          Contact
         </el-menu-item>
       </el-row>
     </el-menu>

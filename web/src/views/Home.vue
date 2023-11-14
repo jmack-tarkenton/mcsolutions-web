@@ -1,5 +1,10 @@
 <template>
-  <el-carousel height="50vh" direction="horizontal" :autoplay="true" type="card">
+  <el-carousel
+    height="50vh"
+    :autoplay="true"
+    :type="isMobile() ? '' : 'card'"
+    :direction="isMobile() ? 'vertical' : 'horizontal'"
+  >
     <el-carousel-item v-for="item in carouselItems" :key="item" style="">
       <div class="carousel-container">
         <div class="top-middle">
@@ -11,6 +16,8 @@
   </el-carousel>
 </template>
 <script lang="ts" setup>
+import { isMobile } from '@/helpers/responsive.ts';
+
 const carouselItems = [
   {
     title: 'Field Inspections',

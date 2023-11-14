@@ -60,6 +60,5 @@ import NavHeader from './components/partials/Header.vue';
   left: 0;
   bottom: 0;
   width: 100%;
-  bottom: 0;
 }
 </style>
