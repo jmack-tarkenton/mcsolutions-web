@@ -12,6 +12,11 @@
   },
   "scripts": {
     "start": "node server.js",
-    "start:dev": "node server.js && cd web && yarn dev"
+    "start:dev": "concurrently \"nodemon --ignore 'web/*'\" \"npm run web:dev\"",
+    "web:dev": "cd web && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2"
   }
 }
