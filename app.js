@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "client-static"),{dotfiles:'allow'}));
 
 app.use("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "client-static", "index.html"));
+    res.sendFile(path.join(__dirname, "web", "index.html"));
 })
 
 module.exports = app;
