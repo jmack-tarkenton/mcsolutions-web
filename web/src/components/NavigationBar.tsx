@@ -5,7 +5,7 @@ import {Container} from "react-bootstrap";
 
 function NavigationBar() {
   return (
-    <Navbar className={'p-1'} bg="light" data-bs-theme="light" expand={'md'}>
+    <Navbar className={'px-2'} bg="dark" data-bs-theme="dark" expand={'md'}>
       <Navbar.Brand href="/"> <img src={McCormickLogo} className="logo" alt="McCormick Solutions"/></Navbar.Brand>
       <Navbar.Toggle aria-controls="navigation-bar"/>
       <Navbar.Collapse id='navigation-bar'>

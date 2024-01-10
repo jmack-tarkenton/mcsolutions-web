@@ -16,6 +16,7 @@
     "web:dev": "cd web && npm run dev"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "concurrently": "^8.2.2",
     "nodemon": "^3.0.2"
   }

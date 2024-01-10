@@ -1,6 +1,6 @@
-
 import NavigationBar from './components/NavigationBar'
-import {Row,  Container} from 'react-bootstrap'
+import Footer from "./components/Footer.tsx";
+import {Row, Container} from 'react-bootstrap'
 
 
 import './styles/App.scss'
@@ -13,7 +13,7 @@ function App() {
       <Row>
         <NavigationBar/>
       </Row>
-
+      <Footer/>
     </Container>
   )
 }
