@@ -7,6 +7,7 @@
   // text-align: center;
 }
 
+
 .logo {
   height: 3em;
   padding: .5em;
@@ -18,6 +19,19 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+.logo-backdrop{
+  position:absolute;
+  opacity: .2;
+  z-index: 1;
+  width:15%;
+  bottom:5rem;
+}
+.landing-img{
+  width: 100%;
+  min-height:20vh;
+  max-height: 40vh;
+  object-fit: cover;
 }
 
 @keyframes logo-spin {

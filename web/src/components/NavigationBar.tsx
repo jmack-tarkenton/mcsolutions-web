@@ -5,15 +5,14 @@ import {Container} from "react-bootstrap";
 
 function NavigationBar() {
   return (
-    <Navbar className={'px-2'} bg="dark" data-bs-theme="dark" expand={'md'}>
+    <Navbar sticky="top"  bg="light" data-bs-theme="light" expand={'md'}>
       <Navbar.Brand href="/"> <img src={McCormickLogo} className="logo" alt="McCormick Solutions"/></Navbar.Brand>
       <Navbar.Toggle aria-controls="navigation-bar"/>
       <Navbar.Collapse id='navigation-bar'>
         <Container>
           <Nav className="justify-content-end">
             <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link href="#about">About</Nav.Link>
           </Nav>
         </Container>
       </Navbar.Collapse>

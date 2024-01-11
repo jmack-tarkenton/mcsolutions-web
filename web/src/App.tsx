@@ -1,21 +1,8 @@
-import NavigationBar from './components/NavigationBar'
-import Footer from "./components/Footer.tsx";
-import {Row, Container} from 'react-bootstrap'
+import {RouterProvider} from "react-router-dom";
+import router from "@/router.tsx";
 
+import '@/styles/App.scss'
 
-import './styles/App.scss'
-
-
-function App() {
-
-  return (
-    <Container fluid>
-      <Row>
-        <NavigationBar/>
-      </Row>
-      <Footer/>
-    </Container>
-  )
-}
+const App = () => <RouterProvider router={router}/>
 
 export default App
