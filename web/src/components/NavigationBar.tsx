@@ -1,7 +1,9 @@
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import McCormickLogo from '../assets/logo.png'
+import McCormickLogo from '@/assets/logo.png'
 import {Container} from "react-bootstrap";
+
+import {Link} from "react-router-dom";
 
 function NavigationBar() {
   return (
@@ -11,8 +13,11 @@ function NavigationBar() {
       <Navbar.Collapse id='navigation-bar'>
         <Container>
           <Nav className="justify-content-end">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#about">About</Nav.Link>
+            {/*<Nav.Link href="#home">Home</Nav.Link>*/}
+            {/*<Nav.Link href="#about">About</Nav.Link>*/}
+            <Navbar.Text>
+              <Link to={'/about'}>About</Link>
+            </Navbar.Text>
           </Nav>
         </Container>
       </Navbar.Collapse>
