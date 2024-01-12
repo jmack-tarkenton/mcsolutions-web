@@ -18,8 +18,8 @@ const counties = {
 
 const mapLayers=[
   {
-    url:"https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/counties_politics_poverty/FeatureServer/0",
-    definitionExpression: `STATE='GA' AND COUNTY in (${counties.active.join(",")})`,
+    url:"http://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/counties_politics_poverty/FeatureServer/0",
+    definitionExpression: `STATE='GA' AND COUNTY in (${counties.active.map(county=>`'${county}'`).join(",")})`,
   }
 ]
 const About = () => <Container fluid className="min-vh-100"> <Row>
