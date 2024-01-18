@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
         <style>
         #map {
-            width: 764px;
+            width: 100%;
             height: 762px;
         }
         </style>
@@ -33,7 +33,7 @@
         <script src="data/lake085_3.js"></script>
         <script>
         var map = L.map('map', {
-            zoomControl:true, maxZoom:28, minZoom:1
+            zoomControl:true, maxZoom:28, minZoom:14
         }).fitBounds([[34.35254339040263,-83.99476275523494],[34.355398956938814,-83.99189967405012]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
@@ -453,62 +453,11 @@
             pane: 'pane_Dawson_Lake_Parcelslake_parcels_virtual_2',
             onEachFeature: pop_Dawson_Lake_Parcelslake_parcels_virtual_2,
             style: style_Dawson_Lake_Parcelslake_parcels_virtual_2_0,
+            minZoom:19,
         });
         bounds_group.addLayer(layer_Dawson_Lake_Parcelslake_parcels_virtual_2);
         map.addLayer(layer_Dawson_Lake_Parcelslake_parcels_virtual_2);
-        function pop_lake085_3(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['AREA'] !== null ? autolinker.link(feature.properties['AREA'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['PERIMETER'] !== null ? autolinker.link(feature.properties['PERIMETER'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['HY_POLY_'] !== null ? autolinker.link(feature.properties['HY_POLY_'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['HY_POLY_ID'] !== null ? autolinker.link(feature.properties['HY_POLY_ID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FEATURE'] !== null ? autolinker.link(feature.properties['FEATURE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FEATURE_ID'] !== null ? autolinker.link(feature.properties['FEATURE_ID'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FEATURE_TY'] !== null ? autolinker.link(feature.properties['FEATURE_TY'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['STATE_FIPS'] !== null ? autolinker.link(feature.properties['STATE_FIPS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['COUNTY_FIP'] !== null ? autolinker.link(feature.properties['COUNTY_FIP'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['HUC'] !== null ? autolinker.link(feature.properties['HUC'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['NAME'] !== null ? autolinker.link(feature.properties['NAME'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['CLASS'] !== null ? autolinker.link(feature.properties['CLASS'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SOURCE'] !== null ? autolinker.link(feature.properties['SOURCE'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['EDITOR'] !== null ? autolinker.link(feature.properties['EDITOR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['SOURCE_DAT'] !== null ? autolinker.link(feature.properties['SOURCE_DAT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['FEAT_MOD_D'] !== null ? autolinker.link(feature.properties['FEAT_MOD_D'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
+
 
         function style_lake085_3_0() {
             return {
@@ -530,28 +479,27 @@
         map.getPane('pane_lake085_3').style['mix-blend-mode'] = 'normal';
         var layer_lake085_3 = new L.geoJson(json_lake085_3, {
             attribution: '',
-            interactive: true,
+            interactive: false,
             dataVar: 'json_lake085_3',
             layerName: 'layer_lake085_3',
             pane: 'pane_lake085_3',
-            onEachFeature: pop_lake085_3,
             style: style_lake085_3_0,
         });
         bounds_group.addLayer(layer_lake085_3);
         map.addLayer(layer_lake085_3);
         map.on("zoomend", function(){
 
-                if (map.hasLayer(layer_Lakefront_Parcel_Lines_w_Length_1)) {
-                    if (map.getZoom() >= 19) {
-                        layer_Lakefront_Parcel_Lines_w_Length_1.eachLayer(function (layer) {
-                            layer.openTooltip();
-                        });
-                    } else {
-                        layer_Lakefront_Parcel_Lines_w_Length_1.eachLayer(function (layer) {
-                            layer.closeTooltip();
-                        });
-                    }
-                }
+                // if (map.hasLayer(layer_Lakefront_Parcel_Lines_w_Length_1)) {
+                //     if (map.getZoom() >= 19) {
+                //         layer_Lakefront_Parcel_Lines_w_Length_1.eachLayer(function (layer) {
+                //             layer.openTooltip();
+                //         });
+                //     } else {
+                //         layer_Lakefront_Parcel_Lines_w_Length_1.eachLayer(function (layer) {
+                //             layer.closeTooltip();
+                //         });
+                //     }
+                // }
         });
         setBounds();
         var i = 0;
@@ -581,17 +529,17 @@
               addLabel(layer, i);
               i++;
         });
-                if (map.hasLayer(layer_Lakefront_Parcel_Lines_w_Length_1)) {
-                    if (map.getZoom() >= 19 ) {
-                        layer_Lakefront_Parcel_Lines_w_Length_1.eachLayer(function (layer) {
-                            layer.openTooltip();
-                        });
-                    } else {
-                        layer_Lakefront_Parcel_Lines_w_Length_1.eachLayer(function (layer) {
-                            layer.closeTooltip();
-                        });
-                    }
-                }
+                // if (map.hasLayer(layer_Lakefront_Parcel_Lines_w_Length_1)) {
+                //     if (map.getZoom() >= 19 ) {
+                //         layer_Lakefront_Parcel_Lines_w_Length_1.eachLayer(function (layer) {
+                //             layer.openTooltip();
+                //         });
+                //     } else {
+                //         layer_Lakefront_Parcel_Lines_w_Length_1.eachLayer(function (layer) {
+                //             layer.closeTooltip();
+                //         });
+                //     }
+                // }
         resetLabels([layer_Lakefront_Parcel_Lines_w_Length_1,layer_Dawson_Lake_Parcelslake_parcels_virtual_2]);
         map.on("zoomend", function(){
             resetLabels([layer_Lakefront_Parcel_Lines_w_Length_1,layer_Dawson_Lake_Parcelslake_parcels_virtual_2]);
