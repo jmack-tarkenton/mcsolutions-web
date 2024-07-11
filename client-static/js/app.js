@@ -67,8 +67,8 @@ employees.forEach((employee) => {
   <div class="card text-white bg-dark mb-3" >
   <img src="./assets/staff/${employee.image}" alt="${employee.firstName}" class="card-img-top">
   <div class="card-body">
-    <h5 class="card-title">${employee.firstName} ${employee.lastName}</h5>
-    <p class="card-text">${employee.postion}</p>
+    <h5 class="card-title text-center">${employee.firstName} ${employee.lastName}</h5>
+    <p class="card-text small text-center">${employee.postion}</p>
   </div>
 </div>
 </div>
