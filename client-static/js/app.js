@@ -47,12 +47,6 @@ var employees = [
         image: "jacob_rickett.jpg",
     },
     {
-        firstName: "Ethan",
-        lastName: "Delong",
-        postion: "Field Appraiser",
-        image: "ethan_delong.jpg",
-    },
-    {
         firstName: "Cody",
         lastName: "Samples",
         postion: "Field Appraiser",
