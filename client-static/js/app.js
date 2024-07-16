@@ -3,66 +3,78 @@
 // });
 
 var employees = [
-  {
-    firstName: "Terry",
-    lastName: "McCormick",
-    postion: "Founder & CEO",
-    image: "terry.jpg",
-  },
-  {
-    firstName: "Kelly",
-    lastName: "McCormick",
-    postion: "COO",
-    image: "kelly.jpg",
-  },
-  {
-    firstName: "Josh",
-    lastName: "McCormick",
-    postion: "EVP",
-    image: "josh.jpg",
-  },
-  {
-    firstName: "Amber",
-    lastName: "Gilbert",
-    postion: "Project Manager",
-    image: "amber.jpg",
-  },
+    {
+        firstName: "Terry",
+        lastName: "McCormick",
+        postion: "Founder & CEO",
+        image: "terry.jpg",
+    },
+    {
+        firstName: "Kelly",
+        lastName: "McCormick",
+        postion: "COO",
+        image: "kelly.jpg",
+    },
+    {
+        firstName: "Josh",
+        lastName: "McCormick",
+        postion: "EVP",
+        image: "josh.jpg",
+    },
+    {
+        firstName: "Amber",
+        lastName: "Gilbert",
+        postion: "Project Manager",
+        image: "amber.jpg",
+    },
 
-  {
-    firstName: "Adam",
-    lastName: "Vaughan",
-    postion: "Field Appraiser",
-    image: "adam.jpg",
-  },
-  {
-    firstName: "Jim",
-    lastName: "Vaughan",
-    postion: "Field Appraiser",
-    image: "jim.jpg",
-  },
-  {
-    firstName: "Jacob",
-    lastName:"Rickett",
-    postion: "Field Appraiser",
-    image: "jacob_rickett.jpg",
-  },
-  {
-    firstName: "Ethan",
-    lastName: "Delong",
-    postion: "Field Appraiser",
-    image: "ethan_delong.jpg",
-  },
-   {
-    firstName:"Cody",
-    lastName: "Samples",
-    postion: "Field Appraiser",
-    image: "cody_samples.jpg",
-   }
+    {
+        firstName: "Adam",
+        lastName: "Vaughan",
+        postion: "Field Appraiser",
+        image: "adam.jpg",
+    },
+    {
+        firstName: "Jim",
+        lastName: "Vaughan",
+        postion: "Field Appraiser",
+        image: "jim.jpg",
+    },
+    {
+        firstName: "Jacob",
+        lastName: "Rickett",
+        postion: "Field Appraiser",
+        image: "jacob_rickett.jpg",
+    },
+    {
+        firstName: "Ethan",
+        lastName: "Delong",
+        postion: "Field Appraiser",
+        image: "ethan_delong.jpg",
+    },
+    {
+        firstName: "Cody",
+        lastName: "Samples",
+        postion: "Field Appraiser",
+        image: "cody_samples.jpg",
+    },
+    {
+        firstName: "Wendi",
+        lastName: "Edge",
+        postion: "Appraiser",
+        image: "wendi.jpg",
+    },
+    {
+        firstName: "Kevin",
+        lastName: "Gaeth",
+        postion: "Appraiser",
+        image: "kevin.jpg",
+    }
 ];
 
 
 employees.forEach((employee) => {
-  $("#employees").append(`
+    $("#employees").append(`
   <div class="col">
   <div class="card text-white bg-dark mb-3" >
   <img src="./assets/staff/${employee.image}" alt="${employee.firstName}" class="card-img-top">
@@ -79,7 +91,7 @@ employees.forEach((employee) => {
 const nav = `
 <div class="container px-5">
     <a class="navbar-brand" href="index.html">
-        <img src="./assets/logo.png" alt="" width="auto" height="50" class="d-inline-block align-text-top">
+        <img src="./assets/logo2_alt.png" alt="McCormick Solutions" width="auto" height="50" class="d-inline-block align-text-top">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -106,5 +118,10 @@ const footer = `<div class="container px-5">
 `;
 
 $(function () {
-  $("#nav").append(nav);
+    $("#nav").append(nav);
+    $("#nav .nav-link").each(function () {
+        if (window.location.pathname.includes($(this).attr("href"))) {
+            $(this).addClass("active");
+        }
+    });
 });

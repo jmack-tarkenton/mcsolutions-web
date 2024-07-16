@@ -54,7 +54,8 @@
 
         @media only screen and (max-width: 460px) {
             .esri-legend {
-                max-width: 100%
+                max-width: 100%;
+                display: none;
             }
         }
     </style>
@@ -66,6 +67,8 @@
             var counties = {
                 active: [
                     'Dawson',
+                    'Bartow',
+                    'Whitfield',
                     'Gwinnett',
                     'Dade',
                     'Greene',
@@ -98,6 +101,13 @@
                 map: map,
                 center: [-83.441162, 33.247875],
                 zoom: 3,
+                ui:{
+                    components:["attribution"]
+                },
+                navigation: {
+                    mouseWheelZoomEnabled: false,
+                    browserTouchPanEnabled: false
+                }
             });
 
             function countyString(countyType) {
@@ -112,20 +122,7 @@
             var inActiveCounties = countyString(counties.inActive);
 
             var definitionExpression = `STATE='GA' AND COUNTY in (${allCounties})`
-           
 
-
-
-            // let countyLayer = new FeatureLayer({
-            //     url: "https://arcgis.atlantaregional.com/arcgis/rest/services/OpenData/FeatureServer/68",
-
-            //     // definitionExpression:definitionExpression,
-            //     outFields: ["*"],
-            //     // renderer:renderer,
-            //     // labelsVisible: true,
-            //     // labelingInfo: [countyLabels]
-
-            // });
             let countyLayer = new FeatureLayer({
                 url: "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/counties_politics_poverty/FeatureServer/0",
                 definitionExpression,
@@ -134,35 +131,9 @@
             });
 
 
-        
-
-
-
-
-            // async function queryAttributes(layer) {
-            //     var layerQuery = layer.createQuery();
-            //     return layer.queryFeatures(layerQuery).then(function(response) {
-            //         covidFeatures = response.features.map(function(feature) {
-            //             return feature
-            //         });
-            //         return covidFeatures;
-            //     });
-            // }
-
-
-
-
-
             var countyQuery = countyLayer.createQuery();
             countyQuery.definitionExpression = definitionExpression;
             let gaCounties = await countyLayer.queryFeatures(countyQuery)
-            // let LMC_Counties = georgiaCounties.features.filter(function(feature) {
-            //     return allCounties.includes(feature.properties.NAME10)
-            // });
-            // LMC_Counties = LMC_Counties.map(county => {
-            //     county.geometry.type = 'polygon';
-            //     return county
-            // })
 
             let LMC_Counties = gaCounties.features.filter(feature => {
                 return allCounties.includes(feature.attributes.COUNTY)
@@ -246,27 +217,7 @@
                 //     ]
                 // }]
             };
-            // var symbol = {
-            //     type: "simple", // autocasts as new UniqueValueRenderer()
-            //     symbol: {
-            //         // type: 'simple-fill',
-            //         // color: [51, 51, 204, 0.9],
-            //         // style: "solid",
-            //         // outline: { // autocasts as new SimpleLineSymbol()
-            //         //     color: "white",
-            //         //     width: 1
-            //         // }
-            //         type: "simple-fill",
-            //         outline: {
-            //             cap: "round",
-            //             width: 1.25,
-            //             color: [236, 83, 83, 1]
-            //         },
-            //         color: [53, 223, 102, 0.25]
-            //     }
 
-            // }
-            // labelClasses = countyAttributes.map()
             var countyLabels = {
                 symbol: {
                     type: "text",
@@ -321,8 +272,6 @@
             })
             map.add(LMCcountyLayer)
 
-            // countyLayer.labelingInfo = countyLabels;
-            // countyLayer.definitionExpression = `STATE='GA' and COUNTY in (${activeCounties})`;
 
             var legend = new Legend({
                 view: view,
@@ -331,7 +280,7 @@
                     title: "Project Status"
                 }]
             });
-            view.ui.add(legend, "bottom-right");
+            view.ui.add(legend, "bottom-left");
             LMCcountyLayer.when(function () {
              
 
@@ -345,6 +294,9 @@
                 return view.goTo(response.extent);
 
             }
+            view.on('drag',function(event){
+                event.stopPropogation();
+            })
 
 
         };
@@ -380,7 +332,7 @@
 
         </nav>
         <!-- Header-->
-        <header class="py-5">
+        <header class="pt-5">
             <div class="container px-5">
                 <div class="row justify-content-center">
                     <div class="col-md-12">
@@ -415,29 +367,10 @@
                 </div>
             </div>
         </section> -->
-        <!-- About section two-->
-        <section class="py-5">
-            <div class="container px-5 my-5">
-                <div class="row gx-5 align-items-center">
-                    <div class="col-lg-6 order-first order-lg-last">
-                        <div class="col-sm-12 mx-auto text-center" id="map-holder">
-                            <div id="viewDiv">
 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <h2 class="fw-bolder">Current Clients</h2>
-                        <p class="lead fw-normal text-muted mb-0">
-                            McCormick Solutions is proud to serve the state of Georgia in all things tax assessment. 
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
         <!-- Team members section-->
-        <section class="py-5 bg-light">
-            <div class="container px-5 my-5">
+        <section class="py-4 bg-light">
+            <div class="container px-5 my-3">
                 <div class="text-center">
                     <h2 class="fw-bolder">Our team</h2>
                     <p class="lead fw-normal text-muted mb-5">Dedicated to quality and your success</p>
@@ -475,6 +408,27 @@
                                 <div class="fst-italic text-muted">CTO</div>
                             </div>
                         </div> -->
+                </div>
+            </div>
+        </section>
+
+        <!-- About section two-->
+        <section class="py-5">
+            <div class="container px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-6 order-first order-lg-last">
+                        <div class="col-sm-12 mx-auto text-center" id="map-holder">
+                            <div id="viewDiv">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h2 class="fw-bolder">Current Clients</h2>
+                        <p class="lead fw-normal text-muted mb-0">
+                            McCormick Solutions is proud to serve the state of Georgia in all things tax assessment.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
