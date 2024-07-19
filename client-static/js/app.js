@@ -63,6 +63,18 @@ var employees = [
         lastName: "Gaeth",
         postion: "Appraiser",
         image: "kevin.jpg",
+    },
+    {
+        firstName: "Gail",
+        lastName: "Bunn",
+        postion: "Appraiser",
+        image: "gail_bunn.jpg",
+    },
+    {
+        firstName: "Scott",
+        lastName: "Allen",
+        postion: "Appraiser",
+        image: "scott_allen.jpg",
     }
 ];
 
