@@ -53,12 +53,6 @@ var employees = [
         image: "cody_samples.jpg",
     },
     {
-        firstName: "Wendi",
-        lastName: "Edge",
-        postion: "Appraiser",
-        image: "wendi.jpg",
-    },
-    {
         firstName: "Kevin",
         lastName: "Gaeth",
         postion: "Appraiser",
